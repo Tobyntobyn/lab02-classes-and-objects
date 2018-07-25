@@ -10,8 +10,8 @@ import Foundation
 class Fraction{
     
     //Stored propertities
-    var num: Int; //numberator
-    var den: Int; //demon
+    private let num: Int; //numerator
+    private let den: Int; //demon
     
     // COMPUTED PROPERTIES
     
@@ -33,22 +33,53 @@ class Fraction{
      - returns: String String representation of a fraction
      */
     var description: String {
+        if(self.den == 1){
+            return "\(self.num)"
+        }
+ 
         return "\(self.num)/\(self.den)"
     }
     
     // Initalisers
-    init() {
+    convenience init() {
         //init(1, 0)
-        self.num = 1
-        self.den = 0
+//        self.num = 1
+//        self.den = 0
+        self.init(num: 1, den: 0 );
     }
     
     init(num: Int, den: Int) {
         // Setting numerator to 0 and
         // denominator to 1 is equivalent
         // to setting the fraction to zero
+        assert(den != 0, "Denominator cannot be zero")
+        
+        var num = num
+        var den = den
+        
+        if(den < 0){
+            // If the denominator is negative
+            // multiply the numerator and
+            // denominator by -1 - this
+            // ensures the denominator is
+            // always positive, and numerator
+            // carries the appropriate sign
+            num = -num
+            den = -den
+        }
+        
+        //Finds greatest common denom
+        for gcd in (1...den).reversed(){
+            //common denom found, divide num and den by it
+            if(num%gcd == 0 && den%gcd==0){
+                num /= gcd
+                den /= gcd
+                break
+            }
+        }
         self.num = num
         self.den = den
+        
     }
     
     convenience init(num: Int) {
